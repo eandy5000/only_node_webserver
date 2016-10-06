@@ -1,3 +1,5 @@
+var Profile = require('./profile');
+
 function home(req, res){
 
     if(req.url === "/"){ 
@@ -20,8 +22,20 @@ function user(req, res){
     var username = req.url.replace("/", "");
     if (username.length > 0 ){
         res.writeHead(200, {"Content-Type": "text/plain"});
-        res.write(username + "\n");
-        res.end("content\n");
+        var studentProfile = new Profile(username);
+        studentProfile.on("end", function(profileJSON){
+            var values = {
+                username : profileJSON.profile_name,
+                badges: profileJSON.badges.length,
+                jsPoints: profileJSON.points.JavaScript
+            }
+            res.write(values.username + " " +values.badges +"\n");
+            res.end(values.jsPoints + " JS\n");
+        });
+        studentProfile.on("error", function(err){
+            res.end(err.message);
+        });
+        
     }
 }
 
