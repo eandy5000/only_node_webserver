@@ -1,5 +1,6 @@
 var Profile = require('./profile');
 var renderer = require('./renderer');
+var querystring = require('querystring');
 
 var commonHeaders = {"Content-Type": "text/html"}
 
@@ -12,9 +13,12 @@ function home(req, res){
             renderer.view("search", {}, res);
             renderer.view("footer", {}, res);
             res.end();
-        } else if(req.method.toLowerCase() === "post"){
+        } else {
             req.on("data", function(postBody){
-                console.log(postBody);
+                var query = querystring.parse(postBody.toString());
+                res.writeHead(303, {Location : "/" + query.username});
+                //res.write(query.username);
+                res.end();
             });
         }
     }
