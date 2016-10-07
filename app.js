@@ -10,5 +10,5 @@ http.createServer(function(req, res){
     router.user(req, res);
 
 }).listen(3000);
-console.log("working");
+console.log("listening on port 3000");
 
